@@ -1,0 +1,99 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "URL Shortener API",
+    "version": "1.0.0",
+    "description": "API para encurtamento de URLs com CRUD, redirecionamento e validação."
+  },
+  "paths": {
+    "/urls": {
+      "post": {
+        "summary": "Cria uma URL encurtada",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "original_url": {"type": "string"}
+                },
+                "required": ["original_url"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {"description": "URL criada com sucesso"},
+          "400": {"description": "Requisição inválida"}
+        }
+      },
+      "get": {
+        "summary": "Lista todas as URLs encurtadas",
+        "responses": {
+          "200": {"description": "Lista de URLs"}
+        }
+      }
+    },
+    "/urls/{short_url}": {
+      "get": {
+        "summary": "Busca uma URL pelo short_url",
+        "parameters": [
+          {"name": "short_url", "in": "path", "required": true, "schema": {"type": "string"}}
+        ],
+        "responses": {
+          "200": {"description": "URL encontrada"},
+          "404": {"description": "URL não encontrada"}
+        }
+      },
+      "put": {
+        "summary": "Atualiza a URL original",
+        "parameters": [
+          {"name": "short_url", "in": "path", "required": true, "schema": {"type": "string"}}
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "original_url": {"type": "string"}
+                },
+                "required": ["original_url"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "URL atualizada"},
+          "400": {"description": "Requisição inválida"},
+          "404": {"description": "URL não encontrada"}
+        }
+      },
+      "delete": {
+        "summary": "Remove uma URL encurtada",
+        "parameters": [
+          {"name": "short_url", "in": "path", "required": true, "schema": {"type": "string"}}
+        ],
+        "responses": {
+          "204": {"description": "URL removida"},
+          "404": {"description": "URL não encontrada"}
+        }
+      }
+    },
+    "/{short_url}": {
+      "get": {
+        "summary": "Redireciona para a URL original",
+        "parameters": [
+          {"name": "short_url", "in": "path", "required": true, "schema": {"type": "string"}}
+        ],
+        "responses": {
+          "302": {"description": "Redirecionamento"},
+          "404": {"description": "URL não encontrada"}
+        }
+      }
+    }
+  }
+}
+
